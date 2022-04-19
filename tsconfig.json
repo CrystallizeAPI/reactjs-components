@@ -1,0 +1,12 @@
+{
+    "extends": "@tsconfig/node16/tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "declaration": true,
+        "declarationDir": "./dist/types",
+        "lib": ["es2021", "DOM"],
+        "jsx": "react-jsx",
+        "sourceMap": true
+    },
+    "include": ["./src/**/*"]
+}
