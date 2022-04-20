@@ -8,8 +8,8 @@
         "Sébastien Morel <sebastien@crystallize.com>"
     ],
     "scripts": {
-        "watch": "yarn tsc -W",
-        "build": "yarn tsc",
+        "watch": "tsc -W",
+        "build": "tsc",
         "test": "jest",
         "bump": "yarn tsc && yarn version --no-git-tag-version --new-version"
     },
@@ -18,7 +18,14 @@
         "url": "https://github.com/CrystallizeAPI/reactjs-components.git"
     },
     "main": "dist/index.js",
-    "types": "dist/types/index.d.ts",
+    "types": "dist/index.d.ts",
+    "typesVersions": {
+        "*": {
+            "image": [
+                "dist/types/image.d.ts"
+            ]
+        }
+    },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
         "@types/node": "^17.0.14",
