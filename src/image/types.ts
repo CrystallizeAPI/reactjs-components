@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, FunctionComponent } from 'react';
+import { HTMLAttributes, FunctionComponent } from 'react';
 import { ImageVariant, RichTextContent } from '@crystallize/js-api-client';
 
 export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
