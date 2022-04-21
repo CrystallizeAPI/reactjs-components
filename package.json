@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "watch": "tsc -W",
-        "build": "tsc & cp assets/video/* dist/video/",
+        "build": "tsc",
         "test": "jest",
         "bump": "yarn tsc && yarn version --no-git-tag-version --new-version"
     },
