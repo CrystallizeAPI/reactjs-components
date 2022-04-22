@@ -1,7 +1,7 @@
-import { HTMLAttributes, FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { ImageVariant, RichTextContent } from '@crystallize/js-api-client';
 
-export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
+export interface ImageProps {
     children?: FunctionComponent<any>;
     src?: string;
     url?: string;
@@ -9,6 +9,8 @@ export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
     altText?: string;
     alt?: string;
     media?: string;
+    style?: React.CSSProperties;
+    className?: string;
     // The `html` content has higher priority than `plainText` because it has richer content.
     // In case of getting both, the `html` is the one that will be displayed.
     caption?: RichTextContent;
