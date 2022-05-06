@@ -80,7 +80,7 @@ export const Renderers = {
         </div>
     ),
     span: (props: NodeProps) => <NodeContent {...props} />,
-    'line-break': () => <br />
+    'line-break': () => <br />,
 };
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {

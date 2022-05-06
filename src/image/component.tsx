@@ -38,7 +38,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
                     vars.push({
                         url: `${base}/@${size}/${filename}.${format}`,
                         key: `${size}.${format}`,
-                        width: size
+                        width: size,
                     });
                 });
             });
@@ -84,7 +84,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         alt,
         caption,
         width: biggestImage?.width,
-        height: biggestImage?.height
+        height: biggestImage?.height,
     };
 
     let useWebP = srcSetWebp.length > 0;
@@ -115,7 +115,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
             media,
             ...commonProps,
             ...rest,
-            originalFileExtension
+            originalFileExtension,
         });
     }
 

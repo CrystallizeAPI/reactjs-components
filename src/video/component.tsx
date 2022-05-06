@@ -47,7 +47,7 @@ export const Video: FC<VideoProps> = ({
     controls = true,
     poster,
     playButtonText = 'Play video',
-    className
+    className,
 }) => {
     const [showThumbnail, setShowThumbnail] = useState(true);
     const [playVideo, setPlayVideo] = useState(false);
@@ -84,7 +84,7 @@ export const Video: FC<VideoProps> = ({
 
         // Hide the thumbnail when the video has started
         video.addEventListener('playing', () => setShowThumbnail(false), {
-            once: true
+            once: true,
         });
 
         const startWithHighQualityVideo = (function () {
@@ -136,17 +136,17 @@ export const Video: FC<VideoProps> = ({
 
                 player.updateSettings({
                     debug: {
-                        logLevel: dashjs.Debug.LOG_LEVEL_NONE /* turns off console logging */
+                        logLevel: dashjs.Debug.LOG_LEVEL_NONE /* turns off console logging */,
                     },
                     streaming: {
                         abr: {
                             initialBitrate: {
                                 audio: -1,
-                                video: startWithHighQualityVideo ? 10000 : -1
+                                video: startWithHighQualityVideo ? 10000 : -1,
                             },
-                            autoSwitchBitrate: { audio: true, video: true }
-                        }
-                    }
+                            autoSwitchBitrate: { audio: true, video: true },
+                        },
+                    },
                 });
                 player.setAutoPlay(true);
                 player.attachView(video);
@@ -164,7 +164,7 @@ export const Video: FC<VideoProps> = ({
 
     const thumbnailStyle = {
         zIndex: showThumbnail ? 2 : 1,
-        opacity: showThumbnail ? 1 : 0
+        opacity: showThumbnail ? 1 : 0,
     };
 
     const posterUrl = poster || getPoster(thumbnails);

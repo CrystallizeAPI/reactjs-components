@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 export enum GridRenderingType {
     Table = 'table',
-    Div = 'div'
+    Div = 'div',
 }
 
 export interface CSSGridProps {

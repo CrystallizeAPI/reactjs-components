@@ -23,8 +23,8 @@ export function getHls() {
                     new window.Hls({
                         testBandwidth: false,
                         abrEwmaDefaultEstimate: 1000000,
-                        abrMaxWithRealBitrate: true
-                    })
+                        abrMaxWithRealBitrate: true,
+                    }),
                 );
             } else {
                 setTimeout(checkForLibraryExistence, 10);

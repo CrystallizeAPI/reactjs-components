@@ -15,7 +15,7 @@ export const CSSGrid: FunctionComponent<CSSGridProps> = ({
             style={{
                 display: 'grid',
                 gridTemplateColumns: `repeat(${totalColSpan}, 1fr)`,
-                ...style
+                ...style,
             }}
             className="crystallize-grid crystallize-grid--css-grid"
             {...props}
@@ -28,7 +28,7 @@ export const CSSGrid: FunctionComponent<CSSGridProps> = ({
                           className="crystallize-grid__cell"
                           style={{
                               gridColumn: `span ${cell.layout.colspan}`,
-                              gridRow: `span ${cell.layout.rowspan}`
+                              gridRow: `span ${cell.layout.rowspan}`,
                           }}
                       >
                           <CellComponent cell={cell} totalColSpan={totalColSpan} />
