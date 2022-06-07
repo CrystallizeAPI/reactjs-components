@@ -1,4 +1,5 @@
 import { FunctionComponent } from 'react';
+import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './GridRenderer';
 import { TableGridProps } from './types';
 
 export const Table: FunctionComponent<TableGridProps> = ({
@@ -23,11 +24,16 @@ export const Table: FunctionComponent<TableGridProps> = ({
                     ? children({ rows, totalColSpan })
                     : rows.map((row: any, i: number) => {
                           return (
-                              <tr key={`row-${i}`}>
+                              <tr key={`row-${i}`} className={getPositionnablRowClassNames(i, rows.length)}>
                                   {row.columns.map((col: any, j: number) => (
                                       <td
                                           key={`cell-${i}-${j}`}
-                                          className="crystallize-grid__cell"
+                                          className={`crystallize-grid__cell ${getPositionnableCellClassNames(
+                                              i,
+                                              j,
+                                              row.length,
+                                              row.columns.length,
+                                          )}`}
                                           rowSpan={col.layout.rowspan}
                                           colSpan={col.layout.colspan}
                                       >
