@@ -44,6 +44,7 @@ export interface GridRendererProps {
     grid: {
         rows: any;
     };
+    style?: React.CSSProperties;
     children?: FunctionComponent<any>;
     styleForCell?: (cell: any, positionInfos: GridPositionnable, styles: React.CSSProperties) => React.CSSProperties;
 }
