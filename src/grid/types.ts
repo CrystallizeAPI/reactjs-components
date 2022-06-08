@@ -6,12 +6,19 @@ export enum GridRenderingType {
     RowCol = 'row-col',
 }
 
+export type GridPositionnable = {
+    rowIndex: number;
+    colIndex: number;
+    rowLength: number;
+    colLength: number;
+};
 export interface CSSGridProps {
     cellComponent: React.FunctionComponent<{ cell: any; totalColSpan: number }>;
     cells: any;
     children?: FunctionComponent<any>;
     totalColSpan: number;
     style?: React.CSSProperties;
+    styleForCell?: (cell: any, positionInfos: GridPositionnable, styles: React.CSSProperties) => React.CSSProperties;
 }
 
 export interface TableGridProps {
@@ -20,6 +27,7 @@ export interface TableGridProps {
     children?: FunctionComponent<any>;
     totalColSpan: number;
     style?: React.CSSProperties;
+    styleForCell?: (cell: any, positionInfos: GridPositionnable, styles: React.CSSProperties) => React.CSSProperties;
 }
 
 export interface RowColGridProps {
@@ -28,6 +36,7 @@ export interface RowColGridProps {
     children?: FunctionComponent<any>;
     totalColSpan: number;
     style?: React.CSSProperties;
+    styleForCell?: (cell: any, positionInfos: GridPositionnable, styles: React.CSSProperties) => React.CSSProperties;
 }
 export interface GridRendererProps {
     cellComponent: React.FunctionComponent<{ cell: any; totalColSpan: number }>;
@@ -36,4 +45,5 @@ export interface GridRendererProps {
         rows: any;
     };
     children?: FunctionComponent<any>;
+    styleForCell?: (cell: any, positionInfos: GridPositionnable, styles: React.CSSProperties) => React.CSSProperties;
 }

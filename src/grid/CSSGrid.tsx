@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 import { getPositionnableCellClassNames } from './GridRenderer';
-import { CSSGridProps } from './types';
+import { CSSGridProps, GridPositionnable } from './types';
 
 export const CSSGrid: FunctionComponent<CSSGridProps> = ({
     cellComponent,
@@ -8,6 +8,7 @@ export const CSSGrid: FunctionComponent<CSSGridProps> = ({
     children,
     totalColSpan = 4,
     style,
+    styleForCell,
     ...props
 }) => {
     const CellComponent = cellComponent;
@@ -22,24 +23,31 @@ export const CSSGrid: FunctionComponent<CSSGridProps> = ({
             {...props}
         >
             {children
-                ? children({ cells, totalColSpan })
-                : cells.map((cell: any, i: number) => (
-                      <div
-                          key={`cell-${i}`}
-                          className={`crystallize-grid__cell ${getPositionnableCellClassNames(
-                              cell.position[0],
-                              cell.position[1],
-                              cell.position[2],
-                              cell.position[3],
-                          )}`}
-                          style={{
-                              gridColumn: `span ${cell.layout.colspan}`,
-                              gridRow: `span ${cell.layout.rowspan}`,
-                          }}
-                      >
-                          <CellComponent cell={cell} totalColSpan={totalColSpan} />
-                      </div>
-                  ))}
+                ? children({ cells, totalColSpan, styleForCell })
+                : cells.map((cell: any, i: number) => {
+                      const defaultStyles = {
+                          gridColumn: `span ${cell.layout.colspan}`,
+                          gridRow: `span ${cell.layout.rowspan}`,
+                      };
+                      const positionInfos: GridPositionnable = {
+                          rowIndex: cell.position[0],
+                          colIndex: cell.position[1],
+                          rowLength: cell.position[2],
+                          colLength: cell.position[3],
+                      };
+                      const cellStyles = styleForCell
+                          ? styleForCell(cell, positionInfos, defaultStyles) || defaultStyles
+                          : defaultStyles;
+                      return (
+                          <div
+                              key={`cell-${i}`}
+                              className={`crystallize-grid__cell ${getPositionnableCellClassNames(positionInfos)}`}
+                              style={cellStyles}
+                          >
+                              <CellComponent cell={cell} totalColSpan={totalColSpan} />
+                          </div>
+                      );
+                  })}
         </div>
     );
 };

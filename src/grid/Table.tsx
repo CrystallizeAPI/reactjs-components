@@ -1,12 +1,13 @@
 import { FunctionComponent } from 'react';
 import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './GridRenderer';
-import { TableGridProps } from './types';
+import { GridPositionnable, TableGridProps } from './types';
 
 export const Table: FunctionComponent<TableGridProps> = ({
     cellComponent,
     rows,
     children,
     totalColSpan = 4,
+    styleForCell,
     ...props
 }) => {
     const CellComponent = cellComponent;
@@ -24,22 +25,34 @@ export const Table: FunctionComponent<TableGridProps> = ({
                     ? children({ rows, totalColSpan })
                     : rows.map((row: any, i: number) => {
                           return (
-                              <tr key={`row-${i}`} className={getPositionnablRowClassNames(i, rows.length)}>
-                                  {row.columns.map((col: any, j: number) => (
-                                      <td
-                                          key={`cell-${i}-${j}`}
-                                          className={`crystallize-grid__cell ${getPositionnableCellClassNames(
-                                              i,
-                                              j,
-                                              row.length,
-                                              row.columns.length,
-                                          )}`}
-                                          rowSpan={col.layout.rowspan}
-                                          colSpan={col.layout.colspan}
-                                      >
-                                          <CellComponent cell={col} totalColSpan={totalColSpan} />
-                                      </td>
-                                  ))}
+                              <tr
+                                  key={`row-${i}`}
+                                  className={getPositionnablRowClassNames({ rowIndex: i, rowLength: rows.length })}
+                              >
+                                  {row.columns.map((cell: any, j: number) => {
+                                      const positionInfos: GridPositionnable = {
+                                          rowIndex: i,
+                                          colIndex: j,
+                                          rowLength: row.length,
+                                          colLength: row.columns.length,
+                                      };
+                                      const cellStyles = styleForCell
+                                          ? styleForCell(cell, positionInfos, {}) || {}
+                                          : {};
+                                      return (
+                                          <td
+                                              key={`cell-${i}-${j}`}
+                                              className={`crystallize-grid__cell ${getPositionnableCellClassNames(
+                                                  positionInfos,
+                                              )}`}
+                                              style={cellStyles}
+                                              rowSpan={cell.layout.rowspan}
+                                              colSpan={cell.layout.colspan}
+                                          >
+                                              <CellComponent cell={cell} totalColSpan={totalColSpan} />
+                                          </td>
+                                      );
+                                  })}
                               </tr>
                           );
                       })}
