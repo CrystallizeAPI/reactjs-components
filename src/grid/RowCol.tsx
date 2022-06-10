@@ -25,7 +25,7 @@ export const RowCol: FunctionComponent<RowColGridProps> = ({
                             )}`}
                         >
                             {row.map((cell: GridCell, cellIndex: number) => {
-                                const cellStyles = styleForCell ? styleForCell(cell.data, {}) || {} : {};
+                                const cellStyles = styleForCell ? styleForCell(cell, {}) || {} : {};
                                 const classes = getPositionnableCellClassNames(cell, dimensions);
                                 return (
                                     <div

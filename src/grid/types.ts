@@ -20,7 +20,6 @@ export type GridCell = {
         rowspan: number;
         colspan: number;
     };
-    data: any;
 };
 
 export type GridPosition = {
