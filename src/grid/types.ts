@@ -20,7 +20,7 @@ export type GridCell = {
         rowspan: number;
         colspan: number;
     };
-};
+} & any;
 
 export type GridPosition = {
     rowIndex: number;
