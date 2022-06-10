@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react';
-import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './GridRenderer';
-import { GridPositionnable, TableGridProps } from './types';
+import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './grid-renderer-utils';
+import { GridCell, TableGridProps } from './types';
 
 export const Table: FunctionComponent<TableGridProps> = ({
     cellComponent,
-    rows,
+    grid,
     children,
-    totalColSpan = 4,
+    dimensions,
     styleForCell,
     ...props
 }) => {
@@ -15,47 +15,38 @@ export const Table: FunctionComponent<TableGridProps> = ({
         <table className="crystallize-grid crystallize-grid--table" {...props}>
             <thead>
                 <tr>
-                    {new Array(totalColSpan).fill(0).map((v, i) => (
+                    {new Array(dimensions.cols).fill(0).map((v, i) => (
                         <th key={`th-${i}`} />
                     ))}
                 </tr>
             </thead>
             <tbody>
-                {children
-                    ? children({ rows, totalColSpan })
-                    : rows.map((row: any, i: number) => {
-                          return (
-                              <tr
-                                  key={`row-${i}`}
-                                  className={getPositionnablRowClassNames({ rowIndex: i, rowLength: rows.length })}
-                              >
-                                  {row.columns.map((cell: any, j: number) => {
-                                      const positionInfos: GridPositionnable = {
-                                          rowIndex: i,
-                                          colIndex: j,
-                                          rowLength: row.length,
-                                          colLength: row.columns.length,
-                                      };
-                                      const cellStyles = styleForCell
-                                          ? styleForCell(cell, positionInfos, {}) || {}
-                                          : {};
-                                      return (
-                                          <td
-                                              key={`cell-${i}-${j}`}
-                                              className={`crystallize-grid__cell ${getPositionnableCellClassNames(
-                                                  positionInfos,
-                                              )}`}
-                                              style={cellStyles}
-                                              rowSpan={cell.layout.rowspan}
-                                              colSpan={cell.layout.colspan}
-                                          >
-                                              <CellComponent cell={cell} totalColSpan={totalColSpan} />
-                                          </td>
-                                      );
-                                  })}
-                              </tr>
-                          );
-                      })}
+                {children && children({ grid, dimensions })}
+                {!children &&
+                    grid.map((row: GridCell[], rowIndex: number) => {
+                        return (
+                            <tr
+                                key={`row-${rowIndex}`}
+                                className={getPositionnablRowClassNames({ rowIndex }, dimensions)}
+                            >
+                                {row.map((cell: GridCell, cellIndex: number) => {
+                                    const cellStyles = styleForCell ? styleForCell(cell.data, {}) || {} : {};
+                                    const classes = getPositionnableCellClassNames(cell, dimensions);
+                                    return (
+                                        <td
+                                            key={`cell-${rowIndex}-${cellIndex}`}
+                                            className={`crystallize-grid__cell ${classes}`}
+                                            style={cellStyles}
+                                            rowSpan={cell.layout.rowspan}
+                                            colSpan={cell.layout.colspan}
+                                        >
+                                            <CellComponent cell={cell} dimensions={dimensions} />
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        );
+                    })}
             </tbody>
         </table>
     );
