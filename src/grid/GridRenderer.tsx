@@ -1,9 +1,9 @@
 import { FunctionComponent } from 'react';
 import { CSSGrid } from './CSSGrid';
-import { getGridDimensions, wrapCellsInRows } from './grid-renderer-utils';
+import { getGridDimensions } from './grid-renderer-utils';
 import { RowCol } from './RowCol';
 import { Table } from './Table';
-import { GridCell, GridRendererProps, GridRenderingType } from './types';
+import { GridRow, GridCell, GridRendererProps, GridRenderingType } from './types';
 
 export const GridRenderer: FunctionComponent<GridRendererProps> = ({
     cellComponent,
@@ -19,13 +19,12 @@ export const GridRenderer: FunctionComponent<GridRendererProps> = ({
     }
     if (!grid.rows.length) return null;
     const dimensions = getGridDimensions(grid.rows);
-    const rows = wrapCellsInRows(grid.rows);
 
     if (type === GridRenderingType.Table) {
         return (
             <Table
                 cellComponent={cellComponent}
-                grid={rows}
+                grid={grid.rows}
                 dimensions={dimensions}
                 styleForCell={styleForCell}
                 {...props}
@@ -38,7 +37,7 @@ export const GridRenderer: FunctionComponent<GridRendererProps> = ({
         return (
             <RowCol
                 cellComponent={cellComponent}
-                grid={rows}
+                grid={grid.rows}
                 dimensions={dimensions}
                 styleForCell={styleForCell}
                 {...props}
@@ -48,12 +47,8 @@ export const GridRenderer: FunctionComponent<GridRendererProps> = ({
         );
     }
 
-    const cells = rows.reduce((accumulator: GridCell[], row: GridCell[], rowIndex: number) => {
-        row.forEach((cell: GridCell) => {
-            accumulator.push(cell);
-        });
-        return accumulator;
-    }, []);
+    const cells = grid.rows.reduce<GridCell[]>((memo, row) => memo.concat(row.columns), []);
+
     return (
         <CSSGrid
             cellComponent={cellComponent}

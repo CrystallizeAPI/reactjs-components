@@ -13,25 +13,23 @@ export type GridDimensions = {
 };
 
 export type GridCell = {
-    position: GridPosition;
-    rowIndex: number;
-    colIndex: number;
     layout: {
         rowspan: number;
         colspan: number;
+        rowIndex: number;
+        colIndex: number;
     };
-} & any;
+};
 
-export type GridPosition = {
-    rowIndex: number;
-    colIndex: number;
+export type GridRow = {
+    columns: GridCell[];
 };
 
 export interface GridRendererProps {
     cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
     type: GridRenderingType;
     grid: {
-        rows: any;
+        rows: GridRow[];
     };
     style?: React.CSSProperties;
     children?: FunctionComponent<any>;
@@ -49,7 +47,7 @@ export interface CSSGridProps {
 
 export interface TableGridProps {
     cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
-    grid: GridCell[][];
+    grid: GridRow[];
     children?: FunctionComponent<any>;
     dimensions: GridDimensions;
     style?: React.CSSProperties;
@@ -58,7 +56,7 @@ export interface TableGridProps {
 
 export interface RowColGridProps {
     cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
-    grid: GridCell[][];
+    grid: GridRow[];
     children?: FunctionComponent<any>;
     dimensions: GridDimensions;
     style?: React.CSSProperties;
