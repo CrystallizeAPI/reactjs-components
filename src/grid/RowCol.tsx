@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './grid-renderer-utils';
-import { GridCell, RowColGridProps } from './types';
+import { GridRow, GridCell, RowColGridProps } from './types';
 
 export const RowCol: FunctionComponent<RowColGridProps> = ({
     cellComponent,
@@ -15,7 +15,7 @@ export const RowCol: FunctionComponent<RowColGridProps> = ({
         <div className="crystallize-grid crystallize-row-col-table" {...props}>
             {children && children({ grid, dimensions })}
             {!children &&
-                grid.map((row: GridCell[], rowIndex: number) => {
+                grid.map((row: GridRow, rowIndex: number) => {
                     return (
                         <div
                             key={`row-${rowIndex}`}
@@ -24,7 +24,7 @@ export const RowCol: FunctionComponent<RowColGridProps> = ({
                                 dimensions,
                             )}`}
                         >
-                            {row.map((cell: GridCell, cellIndex: number) => {
+                            {row.columns.map((cell: GridCell, cellIndex: number) => {
                                 const cellStyles = styleForCell ? styleForCell(cell, {}) || {} : {};
                                 const classes = getPositionnableCellClassNames(cell, dimensions);
                                 return (
