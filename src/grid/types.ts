@@ -19,6 +19,7 @@ export type GridCell = {
         rowIndex: number;
         colIndex: number;
     };
+    [key: string]: any;
 };
 
 export type GridRow = {
