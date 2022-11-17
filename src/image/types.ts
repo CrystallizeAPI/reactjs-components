@@ -8,6 +8,7 @@ export interface ImageProps {
     sizes?: string;
     altText?: string;
     alt?: string;
+    fallbackAlt?: string;
     media?: string;
     style?: React.CSSProperties;
     className?: string;

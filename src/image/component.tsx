@@ -14,6 +14,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         variants,
         altText,
         alt: altPassed,
+        fallbackAlt,
         caption,
         className,
         media,
@@ -23,7 +24,11 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
     } = restOfAllProps;
 
     let vars = (variants || []).filter((v) => !!v);
-    const alt = typeof altPassed === 'string' ? altPassed : altText;
+
+    // if the alt is passed to the component we use that: highest priority
+    // if there is nothing from the API response (altText) then we use the fallbackAlt
+    // otherwise we set empty for W3C validation
+    const alt = altPassed || altText || fallbackAlt || '';
 
     // Naive rendering POC
     if (url && _availableSizes && _availableFormats) {
