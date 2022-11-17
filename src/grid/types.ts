@@ -27,7 +27,11 @@ export type GridRow = {
 };
 
 export interface GridRendererProps {
-    cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
+    cellComponent: React.FunctionComponent<{
+        cell: any;
+        dimensions: GridDimensions;
+        children?: FunctionComponent<any>;
+    }>;
     type: GridRenderingType;
     grid: {
         rows: GridRow[];
@@ -38,7 +42,11 @@ export interface GridRendererProps {
 }
 
 export interface CSSGridProps {
-    cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
+    cellComponent: React.FunctionComponent<{
+        cell: any;
+        dimensions: GridDimensions;
+        children?: FunctionComponent<any>;
+    }>;
     cells: GridCell[];
     children?: FunctionComponent<any>;
     dimensions: GridDimensions;
