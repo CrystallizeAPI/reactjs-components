@@ -20,6 +20,8 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         media,
         _availableSizes,
         _availableFormats,
+        width,
+        height,
         ...rest
     } = restOfAllProps;
 
@@ -88,8 +90,8 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         src: src || url || (hasVariants ? std[0].url : undefined),
         alt,
         caption,
-        width: biggestImage?.width,
-        height: biggestImage?.height,
+        width: width ?? biggestImage?.width,
+        height: height ?? biggestImage?.height,
     };
 
     let useWebP = srcSetWebp.length > 0;

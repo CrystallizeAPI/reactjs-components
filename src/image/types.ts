@@ -12,6 +12,8 @@ export interface ImageProps {
     media?: string;
     style?: React.CSSProperties;
     className?: string;
+    width?: number;
+    height?: number;
     // The `html` content has higher priority than `plainText` because it has richer content.
     // In case of getting both, the `html` is the one that will be displayed.
     caption?: RichTextContent;
