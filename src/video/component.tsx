@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useRef, FC } from 'react';
 import { ImageVariant } from '@crystallize/js-api-client';
 import { supportsDash, getDash } from './dash';

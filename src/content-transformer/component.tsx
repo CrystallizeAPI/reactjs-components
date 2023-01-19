@@ -1,7 +1,7 @@
+'use client';
+
 import { Fragment, createContext, useContext, HTMLAttributes } from 'react';
-
 import { NodeProps, Overrides } from './types';
-
 export { NodeProps, Overrides };
 
 export const Renderers = {
