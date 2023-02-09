@@ -1,5 +1,6 @@
 import { ImageVariant } from '@crystallize/js-api-client';
 import { FunctionComponent } from 'react';
+import { ContentTransformer } from '../content-transformer';
 import { ImageProps } from './types';
 
 function getVariantSrc(variant: ImageVariant): string {
@@ -16,6 +17,8 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         alt: altPassed,
         fallbackAlt,
         caption,
+        captionPassed,
+        fallbackCaption,
         className,
         media,
         _availableSizes,
@@ -31,6 +34,12 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
     // if there is nothing from the API response (altText) then we use the fallbackAlt
     // otherwise we set empty for W3C validation
     const alt = altPassed || altText || fallbackAlt || '';
+
+    //if the caption is passed to the component we use that: highest priority
+    // if there is nothing from the API response (caption) then we use the fallbackCaption
+    // otherwise we set empty for W3C validation
+
+    let captionString = captionPassed || caption?.html?.[0] || caption?.plainText?.[0] || fallbackCaption || '';
 
     // Naive rendering POC
     if (url && _availableSizes && _availableFormats) {
@@ -89,7 +98,6 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         // Ensure fallback src for older browsers
         src: src || url || (hasVariants ? std[0].url : undefined),
         alt,
-        caption,
         width: width ?? biggestImage?.width,
         height: height ?? biggestImage?.height,
     };
@@ -126,8 +134,6 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
         });
     }
 
-    const captionString = caption?.html?.[0] || caption?.plainText?.[0] || '';
-
     return (
         <figure className={className}>
             <picture>
@@ -139,7 +145,14 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <img {...commonProps} {...rest} />
             </picture>
-            {captionString && <figcaption dangerouslySetInnerHTML={{ __html: captionString }} />}
+
+            {!captionPassed && caption?.json?.[0] ? (
+                <figcaption>
+                    <ContentTransformer json={caption?.json?.[0]} />
+                </figcaption>
+            ) : (
+                <figcaption dangerouslySetInnerHTML={{ __html: captionString }} />
+            )}
         </figure>
     );
 };
