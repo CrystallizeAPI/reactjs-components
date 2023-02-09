@@ -39,7 +39,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
     // if there is nothing from the API response (caption) then we use the fallbackCaption
     // otherwise we set empty for W3C validation
 
-    let captionString = captionPassed || caption?.html?.[0] || caption?.plainText?.[0] || fallbackCaption || '';
+    let captionString = captionPassed || caption?.html || caption?.plainText || fallbackCaption || '';
 
     // Naive rendering POC
     if (url && _availableSizes && _availableFormats) {
@@ -146,12 +146,12 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
                 <img {...commonProps} {...rest} />
             </picture>
 
-            {!captionPassed && caption?.json?.[0] ? (
+            {!captionPassed && caption?.json ? (
                 <figcaption>
-                    <ContentTransformer json={caption?.json?.[0]} />
+                    <ContentTransformer json={caption?.json} />
                 </figcaption>
             ) : (
-                <figcaption dangerouslySetInnerHTML={{ __html: captionString }} />
+                <figcaption>{captionString}</figcaption>
             )}
         </figure>
     );
