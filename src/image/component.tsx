@@ -148,7 +148,7 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
 
             {!captionPassed && caption?.json ? (
                 <figcaption>
-                    <ContentTransformer json={caption?.json} />
+                    <ContentTransformer json={caption.json} />
                 </figcaption>
             ) : (
                 <figcaption>{captionString}</figcaption>
