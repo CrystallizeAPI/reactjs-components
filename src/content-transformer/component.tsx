@@ -85,7 +85,7 @@ export const Renderers = {
 
 export interface Props {
     overrides?: Overrides | null;
-    json?: [NodeProps] | NodeProps;
+    json?: NodeProps[] | NodeProps;
 }
 
 export const OverridesContext = createContext<Overrides | null>(null);
@@ -166,7 +166,7 @@ export const ContentTransformer = ({ overrides = null, json }: Props) => {
     }
 
     if (Array.isArray(json)) {
-        const nodes: [NodeProps] = json;
+        const nodes: NodeProps[] = json;
         return (
             <OverridesContext.Provider value={overrides}>
                 {nodes.map((j, i) => (
