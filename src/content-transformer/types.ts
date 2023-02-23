@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 interface NodeMetadata {
     [key: string]: any;
 }
@@ -12,7 +10,7 @@ export interface NodeProps {
     metadata?: NodeMetadata;
 }
 
-export type Override = (props: NodeProps) => ReactElement<any, any> | null | string;
+export type Override = (props: NodeProps) => JSX.Element;
 
 export interface Overrides {
     link?: Override;

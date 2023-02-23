@@ -1,36 +1,36 @@
 'use client';
 
-import { Fragment, createContext, useContext, HTMLAttributes } from 'react';
+import { Fragment, createContext, useContext } from 'react';
 import { NodeProps, Overrides } from './types';
 export { NodeProps, Overrides };
 
-export const Renderers = {
-    link: (props: NodeProps) => (
+export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Element> = {
+    link: (props) => (
         <a href={props.metadata?.href}>
             <NodeContent {...props} />
         </a>
     ),
-    'unordered-list': (props: NodeProps) => (
+    'unordered-list': (props) => (
         <ul>
             <NodeContent {...props} />
         </ul>
     ),
-    'ordered-list': (props: NodeProps) => (
+    'ordered-list': (props) => (
         <ol>
             <NodeContent {...props} />
         </ol>
     ),
-    list: (props: NodeProps) => (
+    list: (props) => (
         <ul>
             <NodeContent {...props} />
         </ul>
     ),
-    'list-item': (props: NodeProps) => (
+    'list-item': (props) => (
         <li>
             <NodeContent {...props} />
         </li>
     ),
-    quote: (props: NodeProps) => {
+    quote: (props) => {
         if (props.kind === 'block') {
             return (
                 <blockquote>
@@ -44,42 +44,42 @@ export const Renderers = {
             </q>
         );
     },
-    paragraph: (props: NodeProps) => (
+    paragraph: (props) => (
         <p>
             <NodeContent {...props} />
         </p>
     ),
-    preformatted: (props: NodeProps) => (
+    preformatted: (props) => (
         <pre>
             <NodeContent {...props} />
         </pre>
     ),
-    code: (props: NodeProps) => (
+    code: (props) => (
         <code>
             <NodeContent {...props} />
         </code>
     ),
-    underlined: (props: NodeProps) => (
+    underlined: (props) => (
         <u>
             <NodeContent {...props} />
         </u>
     ),
-    strong: (props: NodeProps) => (
+    strong: (props) => (
         <strong>
             <NodeContent {...props} />
         </strong>
     ),
-    emphasized: (props: NodeProps) => (
+    emphasized: (props) => (
         <em>
             <NodeContent {...props} />
         </em>
     ),
-    div: (props: NodeProps) => (
+    div: (props) => (
         <div>
             <NodeContent {...props} />
         </div>
     ),
-    span: (props: NodeProps) => <NodeContent {...props} />,
+    span: (props) => <NodeContent {...props} />,
     'line-break': () => <br />,
 };
 
@@ -99,11 +99,11 @@ export const NodeContent = (props: NodeProps) => {
 
     if (props.children) {
         return (
-            <Fragment>
+            <>
                 {props.children.map((child, i) => (
                     <ContentTransformerNode key={i} {...child} />
                 ))}
-            </Fragment>
+            </>
         );
     }
 
@@ -114,10 +114,10 @@ export const NodeContent = (props: NodeProps) => {
 export function renderTextContent(text: String) {
     const partsBetweenLineBreaks = text.split(/\n/g);
     if (partsBetweenLineBreaks.length === 1) {
-        return <Fragment>{text}</Fragment>;
+        return <>{text}</>;
     }
     return (
-        <Fragment>
+        <>
             {partsBetweenLineBreaks.map((part: String, index: Number) => {
                 const key = index.toString();
                 if (index === partsBetweenLineBreaks.length - 1) {
@@ -130,7 +130,7 @@ export function renderTextContent(text: String) {
                     </Fragment>
                 );
             })}
-        </Fragment>
+        </>
     );
 }
 
@@ -141,10 +141,10 @@ export const ContentTransformerNode = (props: NodeProps): JSX.Element => {
     const { type, kind, textContent } = props;
 
     if (type) {
-        const t = type as keyof typeof Renderers;
-        const override = overrides?.[t] as () => JSX.Element;
+        const tag = type as keyof typeof Renderers;
+        const override = overrides?.[tag] as () => JSX.Element;
 
-        Renderer = override || Renderers[type as keyof typeof Renderers];
+        Renderer = override || Renderers[tag];
     }
 
     if (!Renderer) {
