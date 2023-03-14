@@ -28,4 +28,11 @@ export interface Overrides {
     div?: Override;
     span?: Override;
     'line-break'?: Override;
+    heading1?: Override;
+    heading2?: Override;
+    heading3?: Override;
+    deleted?: Override;
+    subscripted?: Override;
+    superscripted?: Override;
+    'horizontal-line'?: Override;
 }

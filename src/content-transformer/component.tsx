@@ -81,6 +81,37 @@ export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Elemen
     ),
     span: (props) => <NodeContent {...props} />,
     'line-break': () => <br />,
+    heading1: (props) => (
+        <h1>
+            <NodeContent {...props} />
+        </h1>
+    ),
+    heading2: (props) => (
+        <h2>
+            <NodeContent {...props} />
+        </h2>
+    ),
+    heading3: (props) => (
+        <h3>
+            <NodeContent {...props} />
+        </h3>
+    ),
+    deleted: (props) => (
+        <del>
+            <NodeContent {...props} />
+        </del>
+    ),
+    subscripted: (props) => (
+        <sub>
+            <NodeContent {...props} />
+        </sub>
+    ),
+    superscripted: (props) => (
+        <sup>
+            <NodeContent {...props} />
+        </sup>
+    ),
+    'horizontal-line': (props) => <hr />,
 };
 
 export interface Props {
