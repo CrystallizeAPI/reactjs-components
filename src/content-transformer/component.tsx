@@ -6,7 +6,7 @@ export { NodeProps, Overrides };
 
 export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Element> = {
     link: (props) => (
-        <a href={props.metadata?.href}>
+        <a href={props.metadata?.href} rel={props.metadata?.rel} target={props.metadata?.target}>
             <NodeContent {...props} />
         </a>
     ),
