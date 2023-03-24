@@ -35,4 +35,8 @@ export interface Overrides {
     subscripted?: Override;
     superscripted?: Override;
     'horizontal-line'?: Override;
+    table?: Override;
+    'table-row'?: Override;
+    'table-cell'?: Override;
+    'table-head-cell'?: Override;
 }

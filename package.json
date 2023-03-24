@@ -1,11 +1,12 @@
 {
     "name": "@crystallize/reactjs-components",
     "license": "MIT",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "author": "Crystallize <hello@crystallize.com> (https://crystallize.com)",
     "contributors": [
         "Håkon Krogh <hakon@crystallize.com>",
-        "Sébastien Morel <sebastien@crystallize.com>"
+        "Sébastien Morel <sebastien@crystallize.com>",
+        "Dhairya Dwivedi <dhairya@crystallize.com>"
     ],
     "scripts": {
         "watch": "tsc -W",

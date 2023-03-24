@@ -111,7 +111,27 @@ export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Elemen
             <NodeContent {...props} />
         </sup>
     ),
-    'horizontal-line': (props) => <hr />,
+    'horizontal-line': () => <hr />,
+    table: (props) => (
+        <table>
+            <NodeContent {...props} />
+        </table>
+    ),
+    'table-row': (props) => (
+        <tr>
+            <NodeContent {...props} />
+        </tr>
+    ),
+    'table-cell': (props) => (
+        <td>
+            <NodeContent {...props} />
+        </td>
+    ),
+    'table-head-cell': (props) => (
+        <th>
+            <NodeContent {...props} />
+        </th>
+    ),
 };
 
 export interface Props {
