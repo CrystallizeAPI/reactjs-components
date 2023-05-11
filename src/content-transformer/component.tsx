@@ -1,6 +1,4 @@
-'use client';
-
-import { Fragment, createContext, useContext } from 'react';
+import { Fragment } from 'react';
 import { NodeProps, Overrides } from './types';
 export { NodeProps, Overrides };
 
@@ -139,8 +137,6 @@ export interface Props {
     json?: NodeProps[] | NodeProps;
 }
 
-export const OverridesContext = createContext<Overrides | null>(null);
-
 export const NodeContent = (props: NodeProps) => {
     const { textContent } = props;
 
@@ -187,9 +183,8 @@ export function renderTextContent(text: String) {
 
 export const ContentTransformerNode = (props: NodeProps): JSX.Element => {
     let Renderer = Renderers.span;
-    const overrides = useContext(OverridesContext);
 
-    const { type, kind, textContent } = props;
+    const { type, kind, textContent, overrides } = props;
 
     if (type) {
         const tag = type as keyof typeof Renderers;
@@ -219,19 +214,15 @@ export const ContentTransformer = ({ overrides = null, json }: Props) => {
     if (Array.isArray(json)) {
         const nodes: NodeProps[] = json;
         return (
-            <OverridesContext.Provider value={overrides}>
+            <Fragment>
                 {nodes.map((j, i) => (
-                    <ContentTransformerNode key={i} {...j} />
+                    <ContentTransformerNode key={i} {...j} overrides={overrides} />
                 ))}
-            </OverridesContext.Provider>
+            </Fragment>
         );
     }
 
     const node: NodeProps = json;
 
-    return (
-        <OverridesContext.Provider value={overrides}>
-            <ContentTransformerNode {...node} />
-        </OverridesContext.Provider>
-    );
+    return <ContentTransformerNode {...node} overrides={overrides} />;
 };
