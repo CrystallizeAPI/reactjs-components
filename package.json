@@ -1,7 +1,7 @@
 {
     "name": "@crystallize/reactjs-components",
     "license": "MIT",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "author": "Crystallize <hello@crystallize.com> (https://crystallize.com)",
     "contributors": [
         "Håkon Krogh <hakon@crystallize.com>",
@@ -10,7 +10,7 @@
     ],
     "scripts": {
         "watch": "tsc -W",
-        "build": "tsc",
+        "build": "tsup src/index.ts --format esm,cjs --dts",
         "test": "jest",
         "bump": "yarn tsc && yarn version --no-git-tag-version --new-version"
     },
@@ -18,21 +18,23 @@
         "type": "git",
         "url": "https://github.com/CrystallizeAPI/reactjs-components.git"
     },
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "peerDependencies": {
+        "react": "*",
+        "react-dom": "*"
+    },
+    "dependencies": {
+        "@crystallize/js-api-client": "*"
+    },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
         "@types/node": "^17.0.14",
         "@types/react": "^17 || ^18",
         "@types/react-dom": "^17 || ^18",
-        "jest": "^27.5.1"
-    },
-    "dependencies": {
-        "@crystallize/js-api-client": "*",
+        "jest": "^27.5.1",
+        "tsup": "^7.2.0",
         "typescript": "^4.5.5"
-    },
-    "peerDependencies": {
-        "react": "*",
-        "react-dom": "*"
     }
 }
