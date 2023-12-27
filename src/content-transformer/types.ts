@@ -31,6 +31,9 @@ export interface Overrides {
     heading1?: Override;
     heading2?: Override;
     heading3?: Override;
+    heading4?: Override;
+    heading5?: Override;
+    heading6?: Override;
     deleted?: Override;
     subscripted?: Override;
     superscripted?: Override;

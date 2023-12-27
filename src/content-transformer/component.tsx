@@ -96,6 +96,21 @@ export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Elemen
             <NodeContent {...props} />
         </h3>
     ),
+    heading4: (props) => (
+        <h4>
+            <NodeContent {...props} />
+        </h4>
+    ),
+    heading5: (props) => (
+        <h5>
+            <NodeContent {...props} />
+        </h5>
+    ),
+    heading6: (props) => (
+        <h6>
+            <NodeContent {...props} />
+        </h6>
+    ),
     deleted: (props) => (
         <del>
             <NodeContent {...props} />
