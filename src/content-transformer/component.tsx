@@ -187,7 +187,7 @@ export function renderTextContent(text: String) {
             {partsBetweenLineBreaks.map((part: String, index: Number) => {
                 const key = index.toString();
                 if (index === partsBetweenLineBreaks.length - 1) {
-                    return <Fragment key={key}>part</Fragment>;
+                    return <Fragment key={key}>{part}</Fragment>;
                 }
                 return (
                     <Fragment key={key}>
