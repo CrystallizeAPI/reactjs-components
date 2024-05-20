@@ -8,9 +8,10 @@ export interface NodeProps {
     textContent?: string;
     children?: [NodeProps];
     metadata?: NodeMetadata;
+    overrides?: Overrides | null;
 }
 
-export type Override = (props: NodeProps) => JSX.Element;
+export type Override = (props: NodeProps) => React.ReactNode;
 
 export interface Overrides {
     link?: Override;
