@@ -1,9 +1,9 @@
 import { FunctionComponent } from 'react';
-import { CSSGrid } from './CSSGrid';
-import { getGridDimensions } from './grid-renderer-utils';
-import { RowCol } from './RowCol';
-import { Table } from './Table';
-import { GridRow, GridCell, GridRendererProps, GridRenderingType } from './types';
+import { CSSGrid } from './CSSGrid.js';
+import { getGridDimensions } from './grid-renderer-utils.js';
+import { RowCol } from './RowCol.js';
+import { Table } from './Table.js';
+import { GridRow, GridCell, GridRendererProps, GridRenderingType } from './types.js';
 
 export const GridRenderer: FunctionComponent<GridRendererProps> = ({
     cellComponent,

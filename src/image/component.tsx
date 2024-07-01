@@ -1,7 +1,7 @@
 import { ImageVariant } from '@crystallize/js-api-client';
 import { FunctionComponent } from 'react';
-import { ContentTransformer } from '../content-transformer';
-import { ImageProps } from './types';
+import { ContentTransformer } from '../content-transformer/index.js';
+import { ImageProps } from './types.js';
 
 function getVariantSrc(variant: ImageVariant): string {
     return `${variant.url} ${variant.width}w`;

@@ -1,3 +1,3 @@
-export * from './CSSGrid';
-export * from './Table';
-export * from './RowCol';
+export * from './CSSGrid.js';
+export * from './Table.js';
+export * from './RowCol.js';

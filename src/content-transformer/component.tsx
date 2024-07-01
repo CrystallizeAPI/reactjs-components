@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { NodeProps, Overrides } from './types';
+import { NodeProps, Overrides } from './types.js';
 export { NodeProps, Overrides };
 
 export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Element> = {

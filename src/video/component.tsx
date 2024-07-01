@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef, FC } from 'react';
 import { ImageVariant } from '@crystallize/js-api-client';
-import { supportsDash, getDash } from './dash';
-import { getHls } from './hls';
-import { VideoProps } from './types';
-import { Image } from '../image/component';
+import { supportsDash, getDash } from './dash.js';
+import { getHls } from './hls.js';
+import { VideoProps } from './types.js';
+import { Image } from '../image/component.js';
 
 declare global {
     interface navigator {

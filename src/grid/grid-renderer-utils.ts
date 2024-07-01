@@ -1,4 +1,4 @@
-import { GridCell, GridDimensions } from './types';
+import { GridCell, GridDimensions } from './types.js';
 
 export const getGridDimensions = (rows: any[]): GridDimensions => {
     return {

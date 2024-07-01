@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
-import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './grid-renderer-utils';
-import { GridRow, GridCell, RowColGridProps } from './types';
+import { getPositionnableCellClassNames, getPositionnablRowClassNames } from './grid-renderer-utils.js';
+import { GridRow, GridCell, RowColGridProps } from './types.js';
 
 export const RowCol: FunctionComponent<RowColGridProps> = ({
     cellComponent,
