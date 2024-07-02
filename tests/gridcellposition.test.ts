@@ -1,4 +1,5 @@
-const { createCatalogueFetcher, createClient, catalogueFetcherGraphqlBuilder } = require('@crystallize/js-api-client');
+import { test, expect } from 'vitest';
+import { createCatalogueFetcher, createClient, catalogueFetcherGraphqlBuilder } from '@crystallize/js-api-client';
 
 test('Get a Grid and check the position', async () => {
     const CrystallizeClient = createClient({
@@ -29,7 +30,7 @@ test('Get a Grid and check the position', async () => {
             },
         },
     };
-    const grid = (await fetch(query)).grid;
+    const grid = (await fetch<any>(query)).grid;
 
     for (const row of grid.rows) {
         for (const cell of row.columns) {
