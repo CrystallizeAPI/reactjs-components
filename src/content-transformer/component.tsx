@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { NodeProps, Overrides } from './types.js';
 export { NodeProps, Overrides };
 
-export const Renderers: Record<keyof Overrides, (props: NodeProps) => JSX.Element> = {
+export const Renderers: Record<keyof Overrides, (props: NodeProps) => React.ReactNode> = {
     link: (props) => (
         <a href={props.metadata?.href} rel={props.metadata?.rel} target={props.metadata?.target}>
             <NodeContent {...props} />
@@ -173,14 +173,14 @@ export const NodeContent = (props: NodeProps) => {
 };
 
 // Render text and convert line breaks (\n) to <br />
-export function renderTextContent(text: String) {
+export function renderTextContent(text: string) {
     const partsBetweenLineBreaks = text.split(/\n/g);
     if (partsBetweenLineBreaks.length === 1) {
         return <>{text}</>;
     }
     return (
         <>
-            {partsBetweenLineBreaks.map((part: String, index: Number) => {
+            {partsBetweenLineBreaks.map((part: string, index: number) => {
                 const key = index.toString();
                 if (index === partsBetweenLineBreaks.length - 1) {
                     return <Fragment key={key}>{part}</Fragment>;
@@ -196,14 +196,14 @@ export function renderTextContent(text: String) {
     );
 }
 
-export const ContentTransformerNode = (props: NodeProps): JSX.Element => {
+export const ContentTransformerNode = (props: NodeProps): React.ReactNode => {
     let Renderer = Renderers.span;
 
     const { type, kind, textContent, overrides } = props;
 
     if (type) {
         const tag = type as keyof typeof Renderers;
-        const override = overrides?.[tag] as () => JSX.Element;
+        const override = overrides?.[tag] as () => React.ReactNode;
 
         Renderer = override || Renderers[tag];
     }
