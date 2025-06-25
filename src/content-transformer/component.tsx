@@ -163,7 +163,7 @@ export const NodeContent = (props: NodeProps) => {
         return (
             <>
                 {props.children.map((child, i) => (
-                    <ContentTransformerNode key={i} {...child} />
+                    <ContentTransformerNode key={i} overrides={props.overrides} {...child} />
                 ))}
             </>
         );
