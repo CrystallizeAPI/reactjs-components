@@ -35,7 +35,7 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@crystallize/js-api-client": "workspace:*"
+        "@crystallize/js-api-client": "^4.3.0"
     },
     "devDependencies": {
         "@tsconfig/node20": "^20.1.4",
