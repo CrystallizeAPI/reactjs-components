@@ -1,4 +1,4 @@
-import { ImageVariant } from '@crystallize/js-api-client';
+import { ImageVariant } from '@crystallize/schema/catalogue';
 import { HTMLAttributes } from 'react';
 
 export interface VideoProps extends HTMLAttributes<HTMLDivElement> {

@@ -1,65 +1,107 @@
-# React JS Components
+# Crystallize React components
 
-This brings Image, Grid and Content Transformer component to ease your rendering when using React JS.
+Typed React components for rendering Crystallize content: Image, Video, Grid, and Content Transformer.
 
 ## Installation
 
-With NPM:
+Use your favorite package manager:
 
 ```bash
+# pnpm
+pnpm add @crystallize/reactjs-components
+
+# npm
 npm install @crystallize/reactjs-components
+
+# yarn
+yarn add @crystallize/reactjs-components
 ```
 
-With Yarn:
+All components are exported from the package root and ship with TypeScript types.
 
-```bash
-yarn add @crystallize/reactjs-components
+```typescript
+import { Image, Video, GridRenderer, GridRenderingType, ContentTransformer } from '@crystallize/reactjs-components';
 ```
 
 ## Image
 
-This output an `img` tag with different source variations from Crystallize using _srcset_. Use this to easily build responsive images powered by Crystallize.
+Responsive <img> wrapped in a <picture> with srcset support. Pass the image object you get from Crystallize.
 
-```javascript
-import { Image } from '@crystallize/reactjs-components/dist/image';
+```typescript
+import { Image } from '@crystallize/reactjs-components';
+
 const imageFromCrystallize = {
-    url: '...',
-    variants: [...]
-}
+    url: 'https://media.crystallize.com/.../image.jpg',
+    altText: 'A nice product',
+    variants: [
+        // ImageVariant[] from @crystallize/schema
+        { url: '.../image@400.jpg', width: 400 },
+        { url: '.../image@700.jpg', width: 700 },
+        { url: '.../image@1000.webp', width: 1000 },
+    ],
+};
 
-<Image
-    {...imageFromCrystallize}
-    sizes="(max-width: 400px) 300w, 700px"
-/>
+export function ProductImage() {
+    return <Image {...imageFromCrystallize} sizes="(max-width: 600px) 90vw, 700px" className="product-image" />;
+}
 ```
 
-There is a live demo: https://crystallizeapi.github.io/libraries/reactjs-components/image
+Notes
+
+- If the API returns caption in json/html/plainText, the component renders it as <figcaption>.
+- You can provide width/height to avoid layout shift; otherwise the largest variant's dimensions are used when available.
+
+Live demo: https://crystallizeapi.github.io/libraries/reactjs-components/image
 
 ## Video
 
-This output videos from Crystallize using the native video element.
+Progressive video player that prefers HLS (m3u8) and falls back to MPEG-DASH (mpd). Renders a thumbnail and a play button, then hydrates the player.
 
-```javascript
-import { Video } from '@crystallize/reactjs-components/dist/video';
+Important
+
+- This component is client-side only (it contains 'use client'). In Next.js, place it in a client component.
+- Include the provided styles once in your app:
+
+```typescript
 import '@crystallize/reactjs-components/assets/video/styles.css';
-const videoFromCrystallize = {
-    playlists: [...],
-    thumbnails: [...]
-}
-
-<Video
-    {...videoFromCrystallize}
-    thumbnmailProps={{ sizes: "(max-width: 700px) 90vw, 700px" }}
-/>
 ```
 
-There is a live demo: https://crystallizeapi.github.io/libraries/reactjs-components/video
+Usage
+
+```typescript
+import { Video } from '@crystallize/reactjs-components';
+
+const videoFromCrystallize = {
+    playlists: ['https://media.crystallize.com/.../master.m3u8', 'https://media.crystallize.com/.../stream.mpd'],
+    thumbnails: [
+        {
+            url: 'https://media.crystallize.com/.../thumb.jpg',
+            variants: [{ url: '.../thumb@700.jpg', width: 700 }],
+        },
+    ],
+};
+
+export function HeroVideo() {
+    return (
+        <Video
+            {...videoFromCrystallize}
+            autoPlay
+            muted
+            controls
+            className="hero-video"
+            videoProps={{ playsInline: true }}
+        />
+    );
+}
+```
+
+Live demo: https://crystallizeapi.github.io/libraries/reactjs-components/video
 
 ## Grid
 
-That makes it easy to render Crystallize grids with React JS. In order to use the grid renderer you'll need to have fetched your grid model. This can be fetched fairly easily from Crystallize's API via GraphQL.
+Render Crystallize grids in React using CSS Grid (default), a semantic table, or row/col wrappers.
 
-At the minimum you will need to fetch layout of each column and some properties on the item. Your query might look something like this:
+Fetch the grid via GraphQL (minimum shape shown):
 
 ```graphql
 query grid($id: Int!, $language: String!) {
@@ -81,49 +123,54 @@ query grid($id: Int!, $language: String!) {
 }
 ```
 
-Then, inside your component, render the Grid, passing through the grid model as a prop. By default, the grid is rendered using CSS grid but it could also be a Table.
+Render
 
-```javascript
-<GridRenderer grid={grid} type={GridRenderingType.Div} cellComponent={Cell} />
-<GridRenderer grid={grid} type={GridRenderingType.Table} cellComponent={Cell} />
-<GridRenderer grid={grid} type={GridRenderingType.RowCol} cellComponent={Cell} />
+```typescript
+import { GridRenderer, GridRenderingType } from '@crystallize/reactjs-components';
+
+const Cell = ({ cell }: { cell: any }) => <div>{cell.item?.name}</div>;
+
+<>
+    {/* CSS Grid */}
+    <GridRenderer grid={grid} type={GridRenderingType.Div} cellComponent={Cell} />
+
+    {/* Table */}
+    <GridRenderer grid={grid} type={GridRenderingType.Table} cellComponent={Cell} />
+
+    {/* Row/Col wrappers */}
+    <GridRenderer grid={grid} type={GridRenderingType.RowCol} cellComponent={Cell} />
+</>;
 ```
 
-There is a live demo: https://crystallizeapi.github.io/libraries/reactjs-components/grid
+Customize per cell via a render-prop or styleForCell
 
-### To go further
-
-If you want full control over each of the cells, you can instead supply a function as the children of the grid component. This will allow you to iterate over each of the cells and mutate them as you please.
-
-```javascript
-const children = ({ cells }) => {
-    return cells.map((cell) => (
-        <div
-            style={{
-                gridColumn: `span ${cell.layout.colspan}`,
-                gridRow: `span ${cell.layout.rowspan}`,
-            }}
-        >
-            {cell.item.name}
-        </div>
-    ));
-};
-
-return (
-    <GridRenderer grid={grid} type={GridRenderingType.Div} cellComponent={Cell}>
-        {children}
-    </GridRenderer>
-);
+```tsx
+<GridRenderer grid={grid} type={GridRenderingType.Div} cellComponent={Cell}>
+    {({ cells }) =>
+        cells.map((cell) => (
+            <div
+                key={`${cell.layout.rowIndex}-${cell.layout.colIndex}`}
+                style={{ gridColumn: `span ${cell.layout.colspan}`, gridRow: `span ${cell.layout.rowspan}` }}
+            >
+                {cell.item.name}
+            </div>
+        ))
+    }
+</GridRenderer>
 ```
+
+Live demo: https://crystallizeapi.github.io/libraries/reactjs-components/grid
 
 ## Content Transformer
 
-This helps you to transform Crystallize rich text json to React html components.
+Render Crystallize rich text JSON to React elements with optional per-node overrides.
 
-```javascript
+```tsx
+import { ContentTransformer, NodeContent, type Overrides, type NodeProps } from '@crystallize/reactjs-components';
+
 const overrides: Overrides = {
     link: (props: NodeProps) => (
-        <a href={props.metadata?.href}>
+        <a href={props.metadata?.href} rel={props.metadata?.rel} target={props.metadata?.target}>
             <NodeContent {...props} />
         </a>
     ),
@@ -132,6 +179,13 @@ const overrides: Overrides = {
 <ContentTransformer json={richTextJson} overrides={overrides} />;
 ```
 
-There is a live demo: https://crystallizeapi.github.io/libraries/reactjs-components/content-transformer
+Live demo: https://crystallizeapi.github.io/libraries/reactjs-components/content-transformer
 
-[crystallizeobject]: crystallize_marketing|folder|6269c9819161f671155d939d
+## Notes on SSR
+
+- Image, Grid, and Content Transformer are SSR-friendly.
+- Video must run on the client. In Next.js, put the usage in a Client Component.
+
+## License
+
+MIT © Crystallize

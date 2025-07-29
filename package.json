@@ -1,7 +1,7 @@
 {
     "name": "@crystallize/reactjs-components",
     "license": "MIT",
-    "version": "3.0.1",
+    "version": "5.0.0",
     "type": "module",
     "author": "Crystallize <hello@crystallize.com> (https://crystallize.com)",
     "contributors": [
@@ -21,9 +21,9 @@
     },
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "import": "./dist/index.js",
-            "require": "./dist/index.cjs",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/index.cjs"
         },
         "./assets/video/styles.css": "./assets/video/styles.css"
     },
@@ -35,15 +35,16 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@crystallize/js-api-client": "workspace:*"
+        "@crystallize/schema": "workspace:*"
     },
     "devDependencies": {
-        "@tsconfig/node20": "^20.1.4",
-        "@types/node": "^20.14.9",
-        "@types/react": "^17 || ^18",
-        "@types/react-dom": "^17 || ^18",
-        "tsup": "^8.1.0",
-        "vitest": "^1.6.0",
-        "typescript": "^5.5.2"
+        "@crystallize/js-api-client": "workspace:*",
+        "@tsconfig/node22": "^22.0.2",
+        "@types/node": "^24.2.0",
+        "@types/react": "^19.1.9",
+        "@types/react-dom": "^19.1.7",
+        "tsup": "^8.5.0",
+        "typescript": "^5.9.2",
+        "vitest": "^3.2.4"
     }
 }

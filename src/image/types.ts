@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { ImageVariant, RichTextContent } from '@crystallize/js-api-client';
+import { ImageVariant, RichTextContent } from '@crystallize/schema/catalogue';
 
 export interface ImageProps {
     children?: FunctionComponent<any>;

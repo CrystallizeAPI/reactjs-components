@@ -1,10 +1,11 @@
-import { ImageVariant } from '@crystallize/js-api-client';
+import { ImageVariant } from '@crystallize/schema/catalogue';
 import { FunctionComponent } from 'react';
 import { ContentTransformer } from '../content-transformer/index.js';
 import { ImageProps } from './types.js';
 
 function getVariantSrc(variant: ImageVariant): string {
-    return `${variant.url} ${variant.width}w`;
+    if (!variant.url) return '';
+    return variant.width ? `${variant.url} ${variant.width}w` : `${variant.url}`;
 }
 
 export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllProps }) => {
@@ -67,10 +68,9 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
     let biggestImage: ImageVariant = vars[0];
     if (hasVariants) {
         biggestImage = vars.reduce(function (acc: ImageVariant, v: ImageVariant): ImageVariant {
-            if (!acc.width || v.width > acc.width) {
-                return v;
-            }
-            return acc;
+            const aw = acc.width ?? 0;
+            const vw = v.width ?? 0;
+            return vw > aw ? v : acc;
         }, vars[0]);
     }
 
@@ -78,28 +78,32 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
     const std = vars.filter((v) => v.url && !v.url.endsWith('.webp') && !v.url.endsWith('.avif'));
     const webp = vars.filter((v) => v.url && v.url.endsWith('.webp'));
     const avif = vars.filter((v) => v.url && v.url.endsWith('.avif'));
-    const srcSet = std.map(getVariantSrc).join(', ');
-    const srcSetWebp = webp.map(getVariantSrc).join(', ');
-    const srcSetAvif = avif.map(getVariantSrc).join(', ');
+    // Prefer candidates that have both url and width for srcset quality
+    const srcSet = std.map(getVariantSrc).filter(Boolean).join(', ');
+    const srcSetWebp = webp.map(getVariantSrc).filter(Boolean).join(', ');
+    const srcSetAvif = avif.map(getVariantSrc).filter(Boolean).join(', ');
 
-    // Determine the original file extension
+    // Determine the original file extension used for the "standard" set
     let originalFileExtension = 'jpeg';
-    if (std.length > 0) {
+    if (std.length > 0 && std[0]?.url) {
         const match = std[0].url.match(/\.(?<name>[^.]+)$/);
-        originalFileExtension = match?.groups?.name || 'jpeg';
-
-        // Provide correct mime type for jpg
-        if (originalFileExtension === 'jpg') {
-            originalFileExtension = 'jpeg';
-        }
+        let ext = match?.groups?.name?.toLowerCase();
+        if (ext === 'jpg') ext = 'jpeg';
+        if (ext) originalFileExtension = ext;
     }
 
+    // Safe fallback src: prefer explicit src, then original url, then any variant
+    const fallbackSrc = src ?? url ?? std[0]?.url ?? webp[0]?.url ?? avif[0]?.url ?? undefined;
+
+    const computedWidth = width ?? biggestImage?.width;
+    const computedHeight = height ?? biggestImage?.height ?? undefined;
+
     const commonProps = {
-        // Ensure fallback src for older browsers
-        src: src || url || (hasVariants ? std[0].url : undefined),
+        // Ensure fallback src for older browsers and when no <source> matches
+        src: fallbackSrc,
         alt,
-        width: width ?? biggestImage?.width,
-        height: height ?? biggestImage?.height,
+        width: computedWidth,
+        height: computedHeight,
     };
 
     let useWebP = srcSetWebp.length > 0;
@@ -148,7 +152,8 @@ export const Image: FunctionComponent<ImageProps> = ({ children, ...restOfAllPro
 
             {!captionPassed && caption?.json ? (
                 <figcaption>
-                    <ContentTransformer json={caption.json} />
+                    {/* The schema exposes json as unknown[], cast to the transformer node type */}
+                    <ContentTransformer json={caption.json as any} />
                 </figcaption>
             ) : (
                 <figcaption>{captionString}</figcaption>

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 export enum GridRenderingType {
     Table = 'table',
@@ -37,7 +37,10 @@ export interface GridRendererProps {
         rows: GridRow[];
     };
     style?: React.CSSProperties;
-    children?: FunctionComponent<any>;
+    // Render prop for custom rendering. Depending on the grid type, you'll receive either `cells` or `grid`.
+    children?:
+        | ((args: { cells: GridCell[]; dimensions: GridDimensions }) => React.ReactNode)
+        | ((args: { grid: GridRow[]; dimensions: GridDimensions }) => React.ReactNode);
     styleForCell?: (cell: GridCell, styles: React.CSSProperties) => React.CSSProperties;
 }
 
@@ -48,7 +51,8 @@ export interface CSSGridProps {
         children?: FunctionComponent<any>;
     }>;
     cells: GridCell[];
-    children?: FunctionComponent<any>;
+    // Render prop for CSSGrid: gets a flat list of cells and grid dimensions.
+    children?: (args: { cells: GridCell[]; dimensions: GridDimensions }) => React.ReactNode;
     dimensions: GridDimensions;
     style?: React.CSSProperties;
     styleForCell?: (cell: GridCell, styles: React.CSSProperties) => React.CSSProperties;
@@ -57,7 +61,8 @@ export interface CSSGridProps {
 export interface TableGridProps {
     cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
     grid: GridRow[];
-    children?: FunctionComponent<any>;
+    // Render prop for Table grid: gets the row/column structure and dimensions.
+    children?: (args: { grid: GridRow[]; dimensions: GridDimensions }) => React.ReactNode;
     dimensions: GridDimensions;
     style?: React.CSSProperties;
     styleForCell?: (cell: GridCell, styles: React.CSSProperties) => React.CSSProperties;
@@ -66,7 +71,8 @@ export interface TableGridProps {
 export interface RowColGridProps {
     cellComponent: React.FunctionComponent<{ cell: any; dimensions: GridDimensions }>;
     grid: GridRow[];
-    children?: FunctionComponent<any>;
+    // Render prop for Row/Col grid: gets the row/column structure and dimensions.
+    children?: (args: { grid: GridRow[]; dimensions: GridDimensions }) => React.ReactNode;
     dimensions: GridDimensions;
     style?: React.CSSProperties;
     styleForCell?: (cell: GridCell, styles: React.CSSProperties) => React.CSSProperties;

@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, FC } from 'react';
-import { ImageVariant } from '@crystallize/js-api-client';
+import { ImageVariant } from '@crystallize/schema/catalogue';
 import { supportsDash, getDash } from './dash.js';
 import { getHls } from './hls.js';
 import { VideoProps } from './types.js';
 import { Image } from '../image/component.js';
+import type { ImageProps } from '../image/types.js';
 
 declare global {
     interface navigator {
@@ -18,24 +19,80 @@ declare global {
  * variants
  */
 function getPoster(thumbnails?: any[]): string | undefined {
-    if (thumbnails && thumbnails.length > 0) {
-        const [firstThumbnail] = thumbnails;
-
-        // Check for naive image props
-        if (firstThumbnail._availableSizes && firstThumbnail._availableFormats) {
-            return firstThumbnail.url;
-        }
-
-        const allVariants = firstThumbnail.variants as ImageVariant[];
-
-        const variantsNoFancyStuff = allVariants.filter((v) => !v.url.endsWith('.webp') && !v.url.endsWith('.avif'));
-
-        return (
-            variantsNoFancyStuff.filter((v) => v.width > 500).sort((a, b) => a.width - b.width)[0].url ||
-            variantsNoFancyStuff[0].url
-        );
+    if (!thumbnails || thumbnails.length === 0) {
+        return undefined;
     }
-    return undefined;
+
+    const [firstThumbnail] = thumbnails;
+
+    // Check for naive image props
+    if (
+        firstThumbnail &&
+        firstThumbnail._availableSizes &&
+        firstThumbnail._availableFormats &&
+        typeof firstThumbnail.url === 'string'
+    ) {
+        return firstThumbnail.url;
+    }
+
+    const allVariants: ImageVariant[] = Array.isArray(firstThumbnail?.variants)
+        ? (firstThumbnail.variants as ImageVariant[]).filter(
+              (v): v is ImageVariant => !!v && typeof (v as any).url === 'string',
+          )
+        : [];
+
+    const variantsNoFancyStuff = allVariants.filter((v: ImageVariant) => {
+        const url = v.url;
+        return typeof url === 'string' && !url.endsWith('.webp') && !url.endsWith('.avif');
+    });
+
+    if (variantsNoFancyStuff.length === 0) {
+        return undefined;
+    }
+
+    const biggerThan500 = variantsNoFancyStuff.filter((v: ImageVariant) => (v.width ?? 0) > 500);
+    const sorted = biggerThan500.sort((a: ImageVariant, b: ImageVariant) => (a.width ?? 0) - (b.width ?? 0));
+    const candidate = sorted[0] ?? variantsNoFancyStuff[0];
+
+    return candidate?.url;
+}
+
+/**
+ * Sanitize a thumbnail object into valid ImageProps, coercing nulls to undefined
+ * and filtering invalid variants
+ */
+function sanitizeImageProps(thumbnail: any): Partial<ImageProps> {
+    if (!thumbnail || typeof thumbnail !== 'object') return {};
+
+    const width = typeof thumbnail.width === 'number' ? thumbnail.width : undefined;
+    const height = typeof thumbnail.height === 'number' ? thumbnail.height : undefined;
+
+    const url = typeof thumbnail.url === 'string' ? thumbnail.url : undefined;
+    const src = typeof thumbnail.src === 'string' ? thumbnail.src : undefined;
+
+    const variants = Array.isArray(thumbnail.variants) ? (thumbnail.variants as any[]).filter((v) => !!v) : undefined;
+
+    const _availableSizes = Array.isArray(thumbnail._availableSizes)
+        ? (thumbnail._availableSizes as any[]).filter((n) => typeof n === 'number')
+        : undefined;
+    const _availableFormats = Array.isArray(thumbnail._availableFormats)
+        ? (thumbnail._availableFormats as any[]).filter((s) => typeof s === 'string')
+        : undefined;
+
+    const altText = typeof thumbnail.altText === 'string' ? thumbnail.altText : undefined;
+    const className = typeof thumbnail.className === 'string' ? thumbnail.className : undefined;
+
+    return {
+        url,
+        src,
+        variants,
+        _availableSizes,
+        _availableFormats,
+        width,
+        height,
+        altText,
+        className,
+    };
 }
 
 export const Video: FC<VideoProps> = ({
@@ -175,9 +232,9 @@ export const Video: FC<VideoProps> = ({
         <div className={`react-video${className ? ` ${className}` : ''}`} style={{ position: 'relative' }}>
             {thumbnails && thumbnails.length > 0 ? (
                 <Image
-                    {...thumbnails[0]}
+                    {...sanitizeImageProps(thumbnails[0])}
                     className="react-video__thumbnail"
-                    {...thumbnailProps}
+                    {...(thumbnailProps as any)}
                     style={thumbnailStyle}
                 />
             ) : (
