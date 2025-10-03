@@ -35,10 +35,10 @@
         "react-dom": "*"
     },
     "dependencies": {
-        "@crystallize/schema": "workspace:*"
+        "@crystallize/schema": "^5.0.0"
     },
     "devDependencies": {
-        "@crystallize/js-api-client": "workspace:*",
+        "@crystallize/js-api-client": "^5.0.0",
         "@tsconfig/node22": "^22.0.2",
         "@types/node": "^24.2.0",
         "@types/react": "^19.1.9",
